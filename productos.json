@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "nombre": "PC",
+    "descripcion": "Pc de ultima generacion",
+    "codigo": "BYR",
+    "precio": "239.09",
+    "status": true,
+    "stock": 20,
+    "categoria": "PC"
+  },
+  {
+    "id": 2,
+    "nombre": "PC",
+    "descripcion": "Pc de ultima generacion",
+    "codigo": "BWP",
+    "precio": "266.44",
+    "status": true,
+    "stock": 20,
+    "categoria": "PC"
+  },
+  {
+    "id": 3,
+    "nombre": "PC",
+    "descripcion": "Pc de ultima generacion",
+    "codigo": "MZN",
+    "precio": "149.99",
+    "status": true,
+    "stock": 20,
+    "categoria": "PC"
+  }
+]
