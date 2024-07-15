@@ -3,7 +3,7 @@ const router = express.Router()
 const fs = require(`fs`)
 
 
-router.get('/api/products', (req, res) => {
+router.get('/', (req, res) => {
     
     fs.readFile('productos.json', 'utf8', (err, data) => {
         if (err) {
@@ -22,7 +22,7 @@ router.get('/api/products', (req, res) => {
     });
 });
 
-router.get('/api/products/:pid', (req, res) => {
+router.get('/:pid', (req, res) => {
 
     const productId = req.params.pid;
 
@@ -43,7 +43,7 @@ router.get('/api/products/:pid', (req, res) => {
     });
 });
 
-router.post('/api/products', (req, res) => {
+router.post('/', (req, res) => {
 
     const { nombre, descripcion, codigo , precio, status, stock, categoria } = req.body;
 
@@ -70,28 +70,79 @@ router.post('/api/products', (req, res) => {
     });
 });
 
-router.put(`/api/products/:pid`, (req,res) => {
-    
-    const productId = parseInt(req.params.id)
-    
+router.put('/:pid', (req, res) => {
+
+    const productId = parseInt(req.params.pid)
+
     fs.readFile('productos.json', 'utf8', (err, data) => {
         if (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Error en el servidor' });
+            console.error(err)
+            return res.status(500).json({ error: 'Error en el servidor' })
         }
+        
+        let productos = JSON.parse(data)
+        let productoActualizado = null
 
-        const productos = JSON.parse(data);
-        const producto = productos.find((producto) => producto.id === parseInt(productId))
+        
+        productos = productos.map(producto => {
+            if (producto.id === productId) {
+                
+                const { nombre, descripcion, codigo, precio, status, stock, categoria } = req.body
 
-        if(producto){
-            const {nombre, descripcion, codigo , precio, status, stock, categoria} = req.body
-            producto = {nombre, descripcion, codigo , precio, status, stock, categoria}
-            res.json(producto)
-        }else {
-            res.status(404).json({ ups: "Producto no encontrado"})
+                producto.nombre = nombre || producto.nombre
+                producto.descripcion = descripcion || producto.descripcion
+                producto.codigo = codigo || producto.codigo
+                producto.precio = precio || producto.precio
+                producto.status = status || producto.status
+                producto.stock = stock || producto.stock
+                producto.categoria = categoria || producto.categoria
+
+                productoActualizado = producto; 
+            }
+            return producto;
+        })
+
+        if (productoActualizado) {
+            
+            fs.writeFile('productos.json', JSON.stringify(productos, null, 2), err => {
+                if (err) {
+                    console.error(err)
+                    return res.status(500).json({ error: 'Error al actualizar el producto en el archivo' })
+                }
+                
+                res.json(productoActualizado)
+            })
+        } else {
+            res.status(404).json({ message: 'Producto no encontrado' })
         }
-    });
-    
+    })
 });
 
-module.exports = router
+
+
+router.delete('/:pid', (req, res) => {
+
+    const productId = parseInt(req.params.pid); 
+
+    fs.readFile('productos.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err)
+            return res.status(500).json({ error: 'Error en el servidor' })
+        }
+        
+        let productos = JSON.parse(data)
+        productos = productos.filter(producto => producto.id !== productId)
+
+        fs.writeFile('productos.json', JSON.stringify(productos, null, 2), err => {
+            if (err) {
+                console.error(err)
+                return res.status(500).json({ error: 'Error al eliminar el producto' })
+            }
+            
+            res.json({ exito: "El producto fue eliminado" })
+        })
+    })
+});
+
+
+module.exports = router;

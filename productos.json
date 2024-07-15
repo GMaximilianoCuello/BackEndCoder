@@ -2,7 +2,7 @@
   {
     "id": 1,
     "nombre": "PC",
-    "descripcion": "Pc de ultima generacion",
+    "descripcion": "Pc de uso de oficina",
     "codigo": "BYR",
     "precio": "239.09",
     "status": true,
@@ -12,9 +12,9 @@
   {
     "id": 2,
     "nombre": "PC",
-    "descripcion": "Pc de ultima generacion",
-    "codigo": "BWP",
-    "precio": "266.44",
+    "descripcion": "Pc de uso gamer",
+    "codigo": "BZD",
+    "precio": "590.98",
     "status": true,
     "stock": 20,
     "categoria": "PC"
@@ -23,8 +23,8 @@
     "id": 3,
     "nombre": "PC",
     "descripcion": "Pc de ultima generacion",
-    "codigo": "MZN",
-    "precio": "149.99",
+    "codigo": "XBD",
+    "precio": "223.59",
     "status": true,
     "stock": 20,
     "categoria": "PC"
