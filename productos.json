@@ -22,9 +22,9 @@
   {
     "id": 3,
     "nombre": "PC",
-    "descripcion": "Pc de ultima generacion",
-    "codigo": "XBD",
-    "precio": "223.59",
+    "descripcion": "Pc ACONCAGUA",
+    "codigo": "XBA",
+    "precio": "366.09",
     "status": true,
     "stock": 20,
     "categoria": "PC"
