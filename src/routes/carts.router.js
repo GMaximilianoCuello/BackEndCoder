@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import fs from "fs";
+
 const router = express.Router();
-const fs = require('fs');
 
 // Crear carrito
 router.post('/', (req, res) => {
@@ -166,4 +167,4 @@ router.delete('/:cid', (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

@@ -1,6 +1,7 @@
-const express = require("express")
+import express from "express";
+import fs from "fs";
 const router = express.Router()
-const fs = require(`fs`)
+
 
 
 router.get('/', (req, res) => {
@@ -64,7 +65,10 @@ router.post('/', (req, res) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ error: 'Internal Server Error' });
+
             }
+
+            req.io.emit('nuevoProducto', nuevoProducto);
             res.json(nuevoProducto);
         });
     });
@@ -83,7 +87,6 @@ router.put('/:pid', (req, res) => {
         let productos = JSON.parse(data)
         let productoActualizado = null
 
-        
         productos = productos.map(producto => {
             if (producto.id === productId) {
                 
@@ -109,7 +112,8 @@ router.put('/:pid', (req, res) => {
                     console.error(err)
                     return res.status(500).json({ error: 'Error al actualizar el producto en el archivo' })
                 }
-                
+
+                req.io.emit('productoActualizado', productoActualizado);
                 res.json(productoActualizado)
             })
         } else {
@@ -139,10 +143,11 @@ router.delete('/:pid', (req, res) => {
                 return res.status(500).json({ error: 'Error al eliminar el producto' })
             }
             
+            req.io.emit('productoEliminado', { id: productId });
             res.json({ exito: "El producto fue eliminado" })
         })
     })
 });
 
 
-module.exports = router;
+export default router;
