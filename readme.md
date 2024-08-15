@@ -1,5 +1,12 @@
 # Capturas de funcionamiento de los JSON / Postman
 
+## TECNOLOGIAS USADAS
+
+- MONGOOSE
+- EXPRESS
+- ROUTER
+- SOCKET.IO
+
 ## Productos.JSON
 
 - GET
