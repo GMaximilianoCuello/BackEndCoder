@@ -6,15 +6,20 @@
     <title>Lista de productos</title>
 </head>
 <body>
+    <h1>Productos</h1>
+    <ul id="products">
+        {{#each products}}
+            <li id="producto-{{this._id}}">
+                ID: {{this._id}}, Nombre: {{this.nombre}}, Descripcion: {{this.descripcion}}, Codigo: {{this.codigo}}, Precio: {{this.precio}}, Stock: {{this.stock}}
+            </li>
+        {{/each}}
+    </ul>
 
-    <h1>Lista de producto</h1>
-    
-    <div id="listaProducto">
-        <h2>Lista de productos</h2>
-        <ul id="productos"></ul>
-    </div>
+    <h2>Carrito</h2>
+    <ul id="cart-products"></ul>
     
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>
 </body>
 </html>
+
