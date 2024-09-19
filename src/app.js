@@ -38,7 +38,16 @@ app.use('/', viewsRouter);
 app.use('/auth', authRouter)
 
 // Handlebars
-app.engine(`handlebars`, handlebars.engine());
+app.engine(
+    'handlebars',
+    handlebars.engine({
+      defaultLayout: 'main',
+      runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+      },
+    })
+);
 app.set(`views`, path.join( __dirname, "views"));
 app.set(`view engine`, `handlebars`);
 

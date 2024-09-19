@@ -1,8 +1,9 @@
 import express from "express";
 import userModel from '../models/user.model.js';
-import passport from '../config/passport.js';
+import {authorization} from '../middleware/auth.js'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { passportCall } from "../utils/utils.js";
 
 const router = express.Router();
 
@@ -48,18 +49,18 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Email o contraseña incorrecta' })
         }
 
-        const token = jwt.sign({ id: user._id }, 'secretocoder', { expiresIn: '24h' })
+        let token = jwt.sign({ id: user._id, role:"user" }, 'secretocoder', { expiresIn: '24h' })
 
         res.cookie('jwt', token, { httpOnly: true, secure: false })
 
-        return res.redirect("/profile")
+        return res.redirect("/auth/profile")
 
     } catch (err) {
         return res.status(500).json({ message: 'Error en el servidor' })
     }
 });
 
-router.get("/profile", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get("/profile", passportCall("jwt"), authorization('user') ,(req, res) => {
     res.render("profile", { user: req.user })
 });
 
