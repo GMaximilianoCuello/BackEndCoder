@@ -6,10 +6,15 @@ import http from "http"
 import { Server } from 'socket.io';
 import productModel from "./models/products.model.js";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+import passport from "./config/passport.js";
 
+
+// --- Rutas ---
 import ioHelp from './routes/products.router.js';
 import cartsRouter from "./routes/carts.router.js"
 import viewsRouter from './routes/views.router.js'
+import authRouter from './routes/auth.router.js'
 
 const app = express()
 const PORT = 8080
@@ -25,9 +30,12 @@ mongoose.connect("mongodb+srv://maxicuello:lucia2014@codercluster.cixh9.mongodb.
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
+app.use(passport.initialize())
 
 app.use(`/api/carts/`, cartsRouter)
 app.use('/', viewsRouter);
+app.use('/auth', authRouter)
 
 // Handlebars
 app.engine(`handlebars`, handlebars.engine());
