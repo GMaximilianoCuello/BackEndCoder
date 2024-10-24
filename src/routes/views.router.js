@@ -1,4 +1,7 @@
 import express from 'express'
+import { passportCall } from "../utils/utils.js";
+import {authorization} from '../middleware/auth.js'
+import productController from '../controllers/products.controllers.js';
 
 const router = express.Router() 
 
@@ -18,8 +21,20 @@ router.get('/register', (req, res) => {
     res.render('register');
 });
 
-router.get('/profile', (req, res) => {
-    res.render('profile');
+router.get('/current', (req, res) => {
+    res.render('current');
+});
+
+router.get("/admin/crud",passportCall("jwt"),authorization("admin"),async (req, res) => {
+    
+    try {
+        const products = await productController.getAllProductsForView();
+        res.render('adminCrud', { products });
+        
+    } catch (error) {
+        console.error('Error al cargar productos en adminCrud:', error);
+        res.status(500).send('Error al cargar la página de administración');
+    }
 });
 
 

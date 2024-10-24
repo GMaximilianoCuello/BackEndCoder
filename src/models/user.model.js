@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     age: { type: Number, required: true },
     password: { type: String, required: true },
-    role: { type: String, default: 'user' }
+    role: { type: String, enum: ["admin", "user"], default: "user" },
+    cartId: { type: mongoose.Schema.Types.ObjectId, ref: 'cart' }
 });
 
 const userModel = mongoose.model(`user`, userSchema);

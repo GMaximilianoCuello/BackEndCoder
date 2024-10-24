@@ -100,5 +100,3 @@ socket.on('dataProducto', (data) => {
     console.log('Productos recibidos:', data);
     data.forEach(añadirProductos);
 });
-
-

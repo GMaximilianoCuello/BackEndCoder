@@ -3,9 +3,16 @@ import userModel from '../models/user.model.js';
 import {authorization} from '../middleware/auth.js'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import dotenv from "dotenv"
 import { passportCall } from "../utils/utils.js";
+import cartService from '../service/cart.service.js';
+import productModel from '../models/products.model.js';
+import cartsModel from "../models/carts.model.js";
 
 const router = express.Router();
+dotenv.config()
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 router.post('/register', async (req, res) => {
 
@@ -49,22 +56,42 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Email o contraseña incorrecta' })
         }
 
-        let token = jwt.sign({ id: user._id, role:"user" }, 'secretocoder', { expiresIn: '24h' })
+        const tokenPayload = { id: user._id, role: user.role };
+        let token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '24h' });
+        res.cookie('jwt', token, { httpOnly: true, secure: false });
 
-        res.cookie('jwt', token, { httpOnly: true, secure: false })
-
-        return res.redirect("/auth/profile")
-
+        if (user.role === 'admin') {
+            return res.redirect("/admin/crud");
+        } else {
+            return res.redirect("/auth/current");
+        }
     } catch (err) {
         return res.status(500).json({ message: 'Error en el servidor' })
     }
 });
 
-router.get("/profile", passportCall("jwt"), authorization('user') ,(req, res) => {
-    res.render("profile", { user: req.user })
-});
+router.get("/current", passportCall("jwt"), authorization('user'), async (req, res) => {
+    try {
+      const user = req.user;
 
+      let cart;
+        if (!user.cartId) {
+        cart = await cartsModel.create({ user: user._id, products: [] });
+        user.cartId = cart._id;
+        await user.save();
+
+        } else {
+        cart = await cartService.getCartById(user.cartId);
+        }
+
+      const products = await productModel.find();
   
+      res.render("current", { user, cart, products });
+    } catch (error) {
+      console.error("Error al obtener el perfil del usuario:", error);
+      res.status(500).json({ error: "Error al obtener el perfil del usuario" });
+    }
+  });
 
 router.get('/logout', (req, res) => {
 

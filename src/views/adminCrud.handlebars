@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Productos</title>
+</head>
+<body>
+    <h1>Administración de Productos</h1>
+
+    <div> 
+        <h2>Creacion de producto</h2>
+
+        <form action="/api/products" method="POST">
+            <input type="text" name="nombre" placeholder="Nombre del producto" required>
+            <input type="number" name="precio" placeholder="Precio" required>
+            <input type="text" name="codigo" placeholder="Codigo" required>
+            <input type="number" name="stock" placeholder="Stock" required>
+            <input type="text" name="categoria" placeholder="Categoria" required>
+            <button type="submit">Agregar Producto</button>
+        </form>
+
+        <form action="/auth/logout" method="GET">
+            <button type="submit" class="btn">Cerrar Sesión</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <div>
+        <h2>Actualizar o eliminar producto</h2>
+        <ul>
+            {{#each products}}
+                <li>
+                    <strong>{{this.nombre}}</strong> - Precio: {{this.precio}} USD
+
+                    <form action="/api/products/update/{{this._id}}" method="POST">
+                        <input type="number" name="precio" placeholder="Nuevo precio" required>
+                        <button type="submit">Actualizar</button>
+                    </form>
+
+                    <form action="/api/products/delete/{{this._id}}" method="POST">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</body>
+</html>

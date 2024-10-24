@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Bienvenido, {{user.first_name}} {{user.last_name}}</h1>
+
+        <div class="profile">
+            <p><strong>Correo Electrónico:</strong> {{user.email}}</p>
+            <p><strong>Edad:</strong> {{user.age}}</p>
+        </div>
+
+        <form action="/auth/logout" method="GET">
+            <button type="submit" class="btn">Cerrar Sesión</button>
+        </form>
+
+        <hr>
+
+        <h2>Tu Carrito</h2>
+
+        {{#if cart.products.length}}
+            <ul>
+                {{#each cart.products}}
+                <li>
+                    <strong>{{this.producto.nombre}}</strong> - Cantidad: {{this.cantidad}}
+                    <form action="/api/carts/{{../cart._id}}/products/{{this.producto._id}}/delete" method="POST">
+                        <button type="submit">Eliminar</button>
+                    </form>
+
+                </li>
+                {{/each}}
+            </ul>
+
+            <form action="/api/carts/{{cart._id}}/purchase" method="POST">
+                <button type="submit">Comprar carrito</button>
+            </form>
+            {{else}}
+            <p>Tu carrito está vacío.</p>
+        {{/if}}
+
+        <hr>
+
+        <h2>Productos Disponibles</h2>
+
+        <ul>
+            {{#each products}}
+                <li>
+                    <strong>{{nombre}}</strong> - Precio: {{precio}} USD
+                    
+                    <form action="/api/carts/{{../cart._id}}/products/{{_id}}" method="POST">
+                        <button type="submit">Agregar al Carrito</button>
+                    </form>
+
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</body>
+</html>
+

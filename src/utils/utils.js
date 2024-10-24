@@ -1,6 +1,9 @@
 import { fileURLToPath } from "url";
 import { dirname } from "path"
 import passport from "passport";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(dirname(__filename))
